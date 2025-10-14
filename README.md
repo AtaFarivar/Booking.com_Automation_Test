@@ -1,84 +1,106 @@
-# 🏨 Booking.com Test Automation Framework (Selenium + TestNG)
+# 🧭 Booking.com Automation Test Project
 
-This project automates the **hotel reservation flow** on
-[Booking.com](https://www.booking.com/) using **Java, Selenium
-WebDriver, TestNG**, and **Extent Reports**.\
-It verifies functionalities such as **city selection, date selection,
-guest configuration (adults, children, rooms)**, and runs tests **in
-parallel** for better efficiency.
+## 📌 Project Overview
+This project is a **Selenium Test Automation Framework** built in **Java (JDK 16)** using **TestNG** for parallel execution and **Extent Reports** for advanced HTML reporting.  
+It automates hotel search and booking flow on [Booking.com](https://www.booking.com) — including destination search, date selection, guest and room configuration.
 
-------------------------------------------------------------------------
+---
 
-## 🚀 Features
+## ⚙️ Tech Stack
 
--   ✅ **End-to-End Booking Flow**: From selecting destination to
-    verifying search results.\
--   🧠 **Page Object Model (POM)**: Clean, maintainable, and scalable
-    structure.\
--   📆 **Dynamic Date Handling**: Automatically selects tomorrow's date
-    and adds 7 nights.\
--   👨‍👩‍👧 **Guest Configuration Tests**: Verifies adult, child, and room
-    adjustments including child age dropdowns.\
--   ⚙️ **Parallel Execution** via TestNG XML\
--   📊 **Beautiful Extent Reports** (auto-cleans old reports, keeps
-    latest)\
--   💻 Works cross-platform (Mac, Windows, Linux)
+| Component | Tool |
+|------------|------|
+| Programming Language | Java 16 |
+| Build Tool | Maven |
+| Test Framework | TestNG |
+| UI Automation | Selenium WebDriver |
+| Reporting | Extent Reports |
+| Driver Management | WebDriverManager |
+| Configuration | Config.properties |
+| Parallel Execution | TestNG XML |
+| IDE | IntelliJ IDEA Community |
 
-------------------------------------------------------------------------
+---
 
-## 🧱 Project Structure
-
-    BookingTests/
-    │
-    ├── src/
-    │   ├── main/java/
-    │   │   ├── models/          # Element locators (By objects)
-    │   │   ├── pages/           # Page classes (POM)
-    │   │   ├── utils/           # Helpers, DriverFactory, ExtentManager
-    │   │
-    │   └── test/java/
-    │       └── Tests/
-    │           ├── BookingReservationTest.java
-    │           ├── HomePage_Verification_Test.java
-    │
-    ├── test-Report/             # Auto-generated Extent HTML reports
-    ├── pom.xml                  # Maven dependencies
-    ├── testng.xml               # TestNG configuration (parallel execution)
-    └── README.md
-
-------------------------------------------------------------------------
-
-## 🧩 Tech Stack
-
-  Tool / Library                  Purpose
-  ------------------------------- -------------------------------------
-  **Java 11+**                    Programming language
-  **Selenium WebDriver 4.27.0**   Browser automation
-  **TestNG 7.10.2**               Test framework + parallel execution
-  **Extent Reports 4.1.7**        Test reporting
-  **WebDriverManager 5.9.3**      Automatic driver management
-  **Maven**                       Build & dependency management
-
-------------------------------------------------------------------------
-
-## ⚙️ Running Tests
-
-### ▶️ 1. Run All Tests Sequentially
-
-``` bash
-mvn clean test
+## 🗂️ Project Structure
+```
+BookingTests/
+ ├── src/
+ │   ├── main/
+ │   │   ├── java/
+ │   │   │   ├── models/              → Element locators
+ │   │   │   ├── pages/               → Page classes (POM)
+ │   │   │   └── utils/               → Utilities (DriverFactory, ConfigReader, ExtentManager)
+ │   │   └── resources/
+ │   │        └── Config.properties   → Browser and URL settings
+ │   └── test/
+ │        └── java/
+ │             └── Tests/
+ │                  ├── BookingReservationTest.java
+ │                  └── HomePage_Verification_Test.java
+ ├── testng.xml                       → Defines suite & parallel execution
+ ├── pom.xml                          → Maven dependencies
+ ├── README.md                        → Project documentation
+ └── test-Report/                     → HTML reports (Extent)
 ```
 
-### ⚡ 2. Run Tests in Parallel
+---
 
-``` bash
-mvn clean test -DsuiteXmlFile=testng.xml
+## 🔧 Configuration File — `Config.properties`
+Define your preferred browser and base URL:
+
+```properties
+browser=chrome
+url=https://www.booking.com
 ```
 
-Your `testng.xml` already runs tests in **parallel**:
+**Supported browsers:**  
+🟢 Chrome | 🦊 Firefox | 🟦 Edge | 🧭 Safari  
 
-``` xml
-<suite name="Booking Parallel Suite" parallel="tests" thread-count="2">
+---
+
+## 🧩 ConfigReader.java
+Utility class that loads configuration values automatically.
+
+```java
+String browser = ConfigReader.get("browser");
+String url = ConfigReader.get("url");
+```
+
+---
+
+## 🚀 DriverFactory.java
+Uses `switch-case` to launch browsers dynamically:
+
+```java
+switch (browser) {
+    case "chrome":
+        WebDriverManager.chromedriver().setup();
+        driver = new ChromeDriver();
+        break;
+    case "firefox":
+        WebDriverManager.firefoxdriver().setup();
+        driver = new FirefoxDriver();
+        break;
+    case "edge":
+        WebDriverManager.edgedriver().setup();
+        driver = new EdgeDriver();
+        break;
+    case "safari":
+        driver = new SafariDriver();
+        break;
+    default:
+        throw new RuntimeException("Invalid browser in Config.properties");
+}
+```
+
+---
+
+## 🧪 Parallel Execution with TestNG
+Run tests in parallel using multiple threads for faster execution:
+
+```xml
+<suite name="Booking Parallel Suite" parallel="tests" thread-count="2" verbose="1">
     <test name="Booking Reservation Flow">
         <classes>
             <class name="Tests.BookingReservationTest"/>
@@ -93,52 +115,57 @@ Your `testng.xml` already runs tests in **parallel**:
 </suite>
 ```
 
-------------------------------------------------------------------------
+---
 
 ## 📊 Reports
+After execution, HTML reports are generated automatically in:
+```
+test-Report/Booking_Report_<timestamp>.html
+```
 
-After each run, a new Extent Report is generated under:
+Each report includes:
+- Test status (PASS/FAIL/SKIP)
+- Screenshots (optional)
+- Execution timeline
+- Environment and browser info
 
-    test-Report/
-    └── Booking_Report_<timestamp>.html
+---
 
-Each new run **cleans older reports** and keeps only the latest one.
+## ▶️ How to Run
 
-------------------------------------------------------------------------
+### 🖥️ Run from IntelliJ IDEA
+Right-click on `testng.xml` → **Run 'testng.xml'**
 
-## 🧪 Test Coverage Summary
+### 🧩 Run from Terminal (Maven)
+```bash
+mvn clean test
+```
 
-  ----------------------------------------------------------------------------------
-  Test                             Description
-  -------------------------------- -------------------------------------------------
-  **HomePage_Verification_Test**   Verifies booking.com home UI and essential
-                                   elements
+### 🌐 Change Browser
+Just edit your `Config.properties`:
+```properties
+browser=edge
+```
 
-  **BookingReservationTest**       Full reservation flow: destination → dates →
-                                   guests → rooms → search
-  ----------------------------------------------------------------------------------
+---
 
-------------------------------------------------------------------------
+## 💡 Features
 
-## 🧠 Future Enhancements
+✅ Parallel test execution  
+✅ Dynamic browser configuration  
+✅ Extent HTML reporting  
+✅ Thread-safe WebDriver instance  
+✅ Clear POM-based architecture  
+✅ Configurable URL and environment  
 
--   🧩 Add **API layer tests** (for Booking API endpoints)
--   🔄 Integrate **Jenkins CI/CD**
--   📬 Email Extent Report automatically after each test run
--   🧱 Add **data-driven testing** with JSON
+---
 
-------------------------------------------------------------------------
+## 👨‍💻 Author
 
-## 🧑‍💻 Author
+**Ata Farivar** — QA Automation Engineer  
+📎 [LinkedIn Profile](https://www.linkedin.com/in/ata-pourfarivarnezhad/)  
 
-**Ata Pourfarivar**\
-📍 Istanbul, Turkey\
-💼 Test Automation Engineer\
-📧 [LinkedIn Profile](https://www.linkedin.com/in/ata-pourfarivarnezhad/)
-
-------------------------------------------------------------------------
+---
 
 ## 🏁 License
-
-This project is licensed under the **MIT License** --- free to use and
-modify.
+This project is intended for educational and professional QA automation portfolio use.

@@ -7,6 +7,7 @@ import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import pages.HomePage;
+import utils.ConfigReader;
 import utils.DriverFactory;
 import utils.ElementHelper;
 import utils.ExtentManager;
@@ -26,17 +27,27 @@ public class BookingReservationTest {
 
     @BeforeMethod
     public void setUp() {
-        // Initialize browser & report
+        // ✅ Initialize browser from Config.properties
         DriverFactory.setDriver();
         driver = DriverFactory.getDriver();
+
+        // ✅ Initialize helper and page classes
         helper = new ElementHelper(driver);
         homePage = new HomePage(driver);
+
+        // ✅ Initialize report
         extent = ExtentManager.getInstance();
         test = extent.createTest("Booking.com Hotel Reservation Test");
         ExtentManager.setExtentTest(test);
 
-        test.log(Status.INFO, "Opened Booking.com homepage for hotel reservation scenario");
+        // ✅ Load URL from config file
+        String baseUrl = ConfigReader.get("url");
+        driver.get(baseUrl);
+        driver.manage().window().maximize();
+
+        test.log(Status.INFO, "🌐 Browser launched and navigated to: " + baseUrl);
     }
+
 
     @Test(description = "Verify that user can search hotels in New York")
     public void verifyHotelSearchFunctionality() {
