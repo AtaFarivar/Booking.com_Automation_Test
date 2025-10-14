@@ -134,7 +134,7 @@ Each new run **cleans older reports** and keeps only the latest one.
 **Ata Pourfarivar**\
 📍 Istanbul, Turkey\
 💼 Test Automation Engineer\
-📧 [LinkedIn Profile](https://www.linkedin.com)
+📧 [LinkedIn Profile](https://www.linkedin.com/in/ata-pourfarivarnezhad/)
 
 ------------------------------------------------------------------------
 
