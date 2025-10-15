@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="Booking Parallel Suite" parallel="tests" thread-count="2" verbose="1">
 
-    <test name="Booking Reservation Flow">
-        <classes>
-            <class name="Tests.BookingReservationTest"/>
-        </classes>
-    </test>
+<suite name="Booking Parallel Suite" parallel="classes" thread-count="2" verbose="1">
 
-    <test name="Home Page Verification">
-        <classes>
-            <class name="Tests.HomePage_Verification_Test"/>
-        </classes>
+    <test name="Booking Automation Tests">
+        <packages>
+            <package name="Tests"/>
+        </packages>
     </test>
 
 </suite>
