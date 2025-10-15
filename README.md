@@ -100,19 +100,17 @@ switch (browser) {
 Run tests in parallel using multiple threads for faster execution:
 
 ```xml
-<suite name="Booking Parallel Suite" parallel="tests" thread-count="2" verbose="1">
-    <test name="Booking Reservation Flow">
-        <classes>
-            <class name="Tests.BookingReservationTest"/>
-        </classes>
+
+<suite name="Booking Parallel Suite" parallel="classes" thread-count="2" verbose="1">
+
+    <test name="Booking Automation Tests">
+        <packages>
+            <package name="Tests"/>
+        </packages>
     </test>
 
-    <test name="Home Page Verification">
-        <classes>
-            <class name="Tests.HomePage_Verification_Test"/>
-        </classes>
-    </test>
 </suite>
+
 ```
 
 ---
